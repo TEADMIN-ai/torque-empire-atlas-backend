@@ -1,4 +1,4 @@
-﻿# 🧠 Torque Empire Backend - Shiny + Plumber API
+# 🧠 Torque Empire Backend - Shiny + Plumber API
 
 # Base image with R + Shiny preinstalled
 FROM rocker/shiny:latest
