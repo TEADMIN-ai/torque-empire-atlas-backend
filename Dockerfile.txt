@@ -1,7 +1,4 @@
-﻿# ==========================================================
-# 🧠 Torque Empire Backend — Shiny + Plumber API
-# Base image with R + Shiny Server
-# ==========================================================
+﻿# 🧠 Torque Empire Backend - Shiny + Plumber API
 FROM rocker/shiny:latest
 
 # Install Linux dependencies
@@ -28,4 +25,4 @@ RUN R -e "install.packages(c('shiny','ggplot2','dplyr','plotly','DT','httr','jso
 EXPOSE 3838 8000
 
 # ✅ Start both Shiny and Plumber API
-CMD R -e "source('app.R)"
+CMD ["R", "-e", "source('app.R')"]

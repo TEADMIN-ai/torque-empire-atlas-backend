@@ -1,14 +1,11 @@
-# 🧠 Torque Empire Backend - Clean Production Version
-
-options(shiny.error = function(e) { 
-  print(paste('💥 SHINY ERROR:', e)) 
-  flush.console() 
-})
-
-print('🚀 Torque Empire Shiny app starting...')
+# 🧠 Torque Empire Backend - Hybrid Shiny + Plumber API
+print('🚀 Starting Torque Empire Backend (Shiny + API) ...')
 
 library(shiny)
+library(plumber)
+library(future)
 
+# ---- SHINY UI ----
 ui <- fluidPage(
   titlePanel("Torque Empire Backend ✅"),
   h3("Shiny Server is running correctly on Railway."),
@@ -19,5 +16,16 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {}
 
-# ✅ Let Shiny Server automatically detect and run this app.R
+# ---- API ----
+future::plan(future::multisession)
+
+# Load your Plumber API from api.R
+api <- plumber::plumb("api.R")
+
+future::future({
+  print("⚙️ Starting Torque Empire API on port 8000 ...")
+  api$run(host = "0.0.0.0", port = 8000)
+})
+
+# ---- Run Shiny ----
 shinyApp(ui, server)
