@@ -17,7 +17,9 @@ ui <- fluidPage(
   tags$footer("Powered by Torque Empire | © 2025")
 )
 
-server <- function(input, output, session) {}
+server <- function(input, output, session) {
+  # Future logic can go here
+}
 
-# ✅ Let Shiny Server automatically detect and run this app.R
-shinyApp(ui, server)
+# ✅ Run the Shiny app
+shinyApp(ui = ui, server = server)
