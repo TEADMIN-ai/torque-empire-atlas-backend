@@ -1,4 +1,6 @@
 ﻿# 🧠 Torque Empire Backend - Shiny + Plumber API
+
+# Base image with R + Shiny preinstalled
 FROM rocker/shiny:latest
 
 # Install Linux dependencies
@@ -18,11 +20,12 @@ COPY . .
 # Copy Shiny Server configuration
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
 
-# Install required R packages (including plumber + future)
-RUN R -e "install.packages(c('shiny','ggplot2','dplyr','plotly','DT','httr','jsonlite','curl','plumber','future'), repos='https://cloud.r-project.org/')"
+# Install required R packages (including Plumber for API)
+RUN R -e "install.packages(c('shiny', 'ggplot2', 'dplyr', 'plotly', 'DT', 'httr', 'jsonlite', 'curl', 'plumber'), repos='https://cloud.r-project.org/')"
 
 # Expose ports for both Shiny (3838) and API (8000)
 EXPOSE 3838 8000
 
 # ✅ Start both Shiny and Plumber API
-CMD ["R", "-e", "source('app.R')"]
+CMD R -e "shiny::runApp('/srv/shiny-server/app.R', host='0.0.0.0', port=3838, launch.browser=FALSE)" & \
+    R -e "source('/srv/shiny-server/api.R')"

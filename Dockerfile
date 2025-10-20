@@ -1,10 +1,7 @@
-﻿# ==========================================================
-# 🧠 Torque Empire Backend — Shiny + Plumber API
-# Base image with R + Shiny Server
-# ==========================================================
+# ?? Torque Empire Backend � Shiny + Plumber API Hybrid
 FROM rocker/shiny:latest
 
-# Install Linux dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
@@ -12,20 +9,23 @@ RUN apt-get update && apt-get install -y \
     libv8-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Set work directory
 WORKDIR /srv/shiny-server/
 
 # Copy project files
 COPY . .
 
-# Copy Shiny Server configuration
+# Copy Shiny server configuration
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
 
-# Install required R packages (including plumber + future)
-RUN R -e "install.packages(c('shiny','ggplot2','dplyr','plotly','DT','httr','jsonlite','curl','plumber','future'), repos='https://cloud.r-project.org/')"
+# Install R packages (including plumber)
+RUN R -e "install.packages(c('shiny','plumber','future','ggplot2','dplyr','plotly','DT','httr','jsonlite','curl'), repos='https://cloud.r-project.org/')"
 
-# Expose ports for both Shiny (3838) and API (8000)
+# Expose ports for both Shiny and API
 EXPOSE 3838 8000
 
-# ✅ Start both Shiny and Plumber API
-CMD R -e "source('app.R)"
+# Start both servers in parallel
+CMD R -e "future::plan('multisession'); \
+          shiny::runApp('/srv/shiny-server/app.R', port=3838, host='0.0.0.0', launch.browser=FALSE) & \
+          pr <- plumber::plumb('/srv/shiny-server/api.R'); \
+          pr(host='0.0.0.0', port=8000)"

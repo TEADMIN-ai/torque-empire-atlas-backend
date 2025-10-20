@@ -1,23 +1,31 @@
-# 🚀 Torque Empire API
+# ?? Torque Empire Backend API
 library(plumber)
 
 #* @apiTitle Torque Empire API
-#* @apiDescription REST endpoints for CRM frontend.
 
+#* Health check
+#* @get /
+function() {
+  list(status = "online", service = "Torque Empire API", year = 2025)
+}
+
+#* Clients endpoint
 #* @get /api/clients
 function() {
   list(
-    list(id = 1, name = "John Doe", email = "john@torqueempire.co.za"),
-    list(id = 2, name = "Jane Smith", email = "jane@torqueempire.co.za"),
-    list(id = 3, name = "Ava Moyo", email = "ava@torqueempire.co.za")
+    clients = list(
+      list(id = 1, name = "John Doe", email = "john@torqueempire.co.za"),
+      list(id = 2, name = "Jane Smith", email = "jane@torqueempire.co.za")
+    )
   )
 }
 
+#* Finance endpoint
 #* @get /api/finance
 function() {
   list(
-    revenue = 154230,
-    expenses = 65800,
-    profit = 88430
+    totalRevenue = 250000,
+    expenses = 80000,
+    profit = 170000
   )
 }

@@ -1,25 +1,22 @@
-# 🧠 Torque Empire Backend - Clean Production Version
+# ?? Torque Empire Backend - Clean Hybrid Version
 
 options(shiny.error = function(e) { 
-  print(paste('💥 SHINY ERROR:', e)) 
+  print(paste('?? SHINY ERROR:', e)) 
   flush.console() 
 })
 
-print('🚀 Torque Empire Shiny app starting...')
+print('?? Torque Empire Backend starting...')
 
 library(shiny)
 
 ui <- fluidPage(
-  titlePanel("Torque Empire Backend ✅"),
-  h3("Shiny Server is running correctly on Railway."),
-  p("If you can see this, the deployment is successful."),
+  titlePanel("Torque Empire Backend ?"),
+  h3("Shiny + API server running correctly on Railway."),
+  p("If you can see this, deployment and API integration are successful."),
   br(),
-  tags$footer("Powered by Torque Empire | © 2025")
+  tags("Powered by Torque Empire | � 2025")
 )
 
-server <- function(input, output, session) {
-  # Future logic can go here
-}
+server <- function(input, output, session) {}
 
-# ✅ Run the Shiny app
 shinyApp(ui = ui, server = server)
