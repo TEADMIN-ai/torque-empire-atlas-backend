@@ -1,4 +1,4 @@
-﻿# Torque Empire API - health & info endpoints
+# Torque Empire API - health & info endpoints
 library(plumber)
 library(jsonlite)
 

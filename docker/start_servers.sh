@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 echo "[ $(date) ] âœ… Starting Plumber API..."
 

@@ -1,4 +1,4 @@
-﻿library(plumber)
+library(plumber)
 
 # Load the plumber API from the api/ directory
 pr <- plumb("api/main.R")

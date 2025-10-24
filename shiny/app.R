@@ -1,4 +1,4 @@
-﻿# Torque Empire Shiny App + Integrated API Healthcheck
+# Torque Empire Shiny App + Integrated API Healthcheck
 
 options(shiny.error = function(e) {
   print(paste("💥 SHINY ERROR:", e))
