@@ -1,0 +1,20 @@
+# Use the official Shiny base image
+FROM rocker/shiny:latest
+
+# Set the working directory inside the container
+WORKDIR /srv/shiny-server/
+
+# Copy all app files into the container
+COPY . .
+
+# Install all required R packages
+RUN R -e "install.packages(c( \
+  'shiny', 'ggplot2', 'dplyr', 'plotly', 'DT', \
+  'httr', 'jsonlite', 'curl', 'plumber' \
+), repos='https://cloud.r-project.org/')"
+
+# Expose Shiny port
+EXPOSE 3838
+
+# Start the Shiny server
+CMD ["/usr/bin/shiny-server"]

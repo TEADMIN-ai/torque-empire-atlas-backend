@@ -1,31 +1,31 @@
-# 🧠 Torque Empire Backend - Shiny + Plumber API
+﻿FROM rocker/r-ver:4.3.1
 
-# Base image with R + Shiny preinstalled
-FROM rocker/shiny:latest
-
-# Install Linux dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
     libxml2-dev \
-    libv8-dev \
-    && rm -rf /var/lib/apt/lists/*
+    libpq-dev \
+    git \
+    curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install required R packages
+RUN R -e "install.packages(c('plumber', 'jsonlite', 'DBI', 'RPostgres'), repos = 'https://cloud.r-project.org')"
 
 # Set working directory
-WORKDIR /srv/shiny-server/
+WORKDIR /srv/shiny-server
 
-# Copy project files
-COPY . .
+# Copy API files into container
+COPY ./api ./api
+COPY docker/start_servers.sh ./start_servers.sh
+COPY docker/run_api.R ./run_api.R
 
-# Copy Shiny Server configuration
-COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
+# Make entrypoint script executable
+RUN chmod +x ./start_servers.sh
 
-# Install required R packages (including Plumber for API)
-RUN R -e "install.packages(c('shiny', 'ggplot2', 'dplyr', 'plotly', 'DT', 'httr', 'jsonlite', 'curl', 'plumber'), repos='https://cloud.r-project.org/')"
+# Expose port
+EXPOSE 8000
 
-# Expose ports for both Shiny (3838) and API (8000)
-EXPOSE 3838 8000
-
-# ✅ Start both Shiny and Plumber API
-CMD R -e "shiny::runApp('/srv/shiny-server/app.R', host='0.0.0.0', port=3838, launch.browser=FALSE)" & \
-    R -e "source('/srv/shiny-server/api.R')"
+# Launch Plumber API
+CMD ["bash", "./start_servers.sh"]
