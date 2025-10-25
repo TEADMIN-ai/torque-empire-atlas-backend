@@ -1,7 +1,7 @@
-library(plumber)
+﻿# docker/run_api.R
+future::plan("multisession")
 
-# Load the plumber API from the api/ directory
-pr <- plumb("api/main.R")
+shiny::runApp("shiny/app.R", port = 3838, host = "0.0.0.0", launch.browser = FALSE) &
 
-# Run on port 8000, listen on all interfaces
-pr$run(host = "0.0.0.0", port = 8000)
+pr <- plumber::plumb("api/api.R")
+pr(host = "0.0.0.0", port = 8000)
