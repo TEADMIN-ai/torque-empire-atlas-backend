@@ -11,12 +11,16 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Install required R packages
-RUN R -e "install.packages(c('plumber', 'jsonlite', 'DBI', 'RPostgres', 'future'), repos = 'https://cloud.r-project.org')"
+RUN Rscript -e "repos <- 'https://cloud.r-project.org'; \
+  packages <- c('plumber','jsonlite','DBI','RPostgres','future'); \
+  missing <- setdiff(packages, rownames(installed.packages())); \
+  if (length(missing)) install.packages(missing, repos = repos); \
+  message('Installed: ', paste(missing, collapse = ', '))"
 
 # Set working directory
 WORKDIR /srv/shiny-server
 
-# Copy project files into container
+# Copy app and API files into container
 COPY ./api ./api
 COPY docker/start_servers.sh ./start_servers.sh
 COPY docker/run_api.R ./run_api.R
@@ -24,8 +28,8 @@ COPY docker/run_api.R ./run_api.R
 # Make startup script executable
 RUN chmod +x ./start_servers.sh
 
-# Expose Plumber API port
+# Expose ports
 EXPOSE 8000
 
-# Launch script
+# Start the Shiny and Plumber apps
 CMD ["bash", "./start_servers.sh"]
