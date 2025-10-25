@@ -2,4 +2,5 @@
 
 echo "[ $(date) ] âœ… Starting Plumber API..."
 
-Rscript docker/run_api.R
+Rscript ./run_api.R
+
